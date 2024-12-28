@@ -1,27 +1,36 @@
 mod constants;
 mod handlers;
 mod models;
+mod services;
 
-use std::io::{self, Write};
+use std::{env, sync::{Arc, Mutex}};
+use dotenv::dotenv;
 use actix_web::{web, App, HttpServer};
 use handlers::route_planner::get_route_planner;
 use constants::{LOCAL_HOST, PORT, STARTED_SUCCESFULLY, ERROR_RUNNING_SERVER, ERROR_STARTING_SERVER};
+use models::state::ApplicationState;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let server = HttpServer::new(|| {
+
+    dotenv().ok();
+    let api_key = env::var("API_KEY").expect("You must to provide an API key");
+
+    let server = HttpServer::new(move || {
         App::new()
-            .service(
-                web::scope("api")
-                    .service(get_route_planner)
-            )
+        .app_data(web::Data::new(ApplicationState {
+            api_key: Arc::new(Mutex::new(api_key.clone()))
+        }))
+        .service(
+            web::scope("api")
+                .service(get_route_planner)
+        )
     })
     .bind((LOCAL_HOST, PORT));
 
     match server {
         Ok(server) => {
-            print!("{}", STARTED_SUCCESFULLY);
-            io::stdout().flush()?;
+            println!("{}", STARTED_SUCCESFULLY);
             if let Err(e) = server.run().await {
                 eprintln!("{} {}", ERROR_RUNNING_SERVER, e);
             }

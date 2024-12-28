@@ -21,7 +21,8 @@ pub struct Destination {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Location {
-    latLng: LatLng
+    #[serde(rename="latLng")]
+    lat_lng: LatLng
 
 }
 #[derive(Debug, Serialize, Deserialize)] 
