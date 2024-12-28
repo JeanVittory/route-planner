@@ -1,26 +1,37 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
+
 pub struct RequestRoutePlanner {
     origin: Origin,
     destination: Destination,
+    #[serde(rename="travelMode")]
     travel_mode: TravelMode,
 }
-#[derive(Deserialize)] 
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Origin {
-    location: LatLng,
+    location: Location,
 }
-#[derive(Deserialize)] 
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Destination {
-    location: LatLng,
+    location: Location,
 }
-#[derive(Deserialize)] 
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Location {
+    latLng: LatLng
+
+}
+#[derive(Debug, Serialize, Deserialize)] 
 pub struct LatLng {
     latitude: f64,
     longitude: f64,
 }
 
-#[derive(Deserialize)]  
+
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")] 
 pub enum TravelMode {
     DRIVE,
