@@ -1,12 +1,20 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-
 pub struct RequestRoutePlanner {
     origin: Origin,
     destination: Destination,
     #[serde(rename="travelMode")]
     travel_mode: TravelMode,
+    #[serde(rename="routingPreference")]
+    routing_preference: RoutingPreference,
+    #[serde(rename="computeAlternativeRoutes")]
+    compute_alternative_routes: bool,
+    #[serde(rename="routeModifiers")]
+    route_modifiers: RouteModifiers,
+    #[serde(rename="languageCode")]
+    language_code: String,
+    units: Units
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -31,13 +39,48 @@ pub struct LatLng {
     longitude: f64,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub enum RoutingPreference {
+    #[serde(rename="ROUTING_PREFERENCE_UNSPECIFIED")]
+    RoutingPreferenceUnspecified,
+    #[serde(rename="TRAFIC_UNAWARE")]
+    TraficUnaware,
+    #[serde(rename="TRAFFIC_AWARE")]
+    TraficAware,
+    #[serde(rename="TRAFFIC_AWARE_OPTIMAL")]
+    TraficAwareOptimal
+}
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")] 
 pub enum TravelMode {
-    DRIVE,
-    WALK,
-    BICYCLE,
-    TWOWHEELER,
-    TRANSIT
+    #[serde(rename="DRIVE")]
+    Drive,
+    #[serde(rename="WALK")]
+    Walk,
+    #[serde(rename="BICYLE")]
+    Bicyle,
+    #[serde(rename="TWO_WHEELER")]
+    TwoWheeler,
+    #[serde(rename="TRANSIT")]
+    Transit,
+    #[serde(rename="TRAVEL_MODE_UNSPECIFIED")]
+    TravelModeUnspecified
+}
+
+#[derive(Debug, Serialize, Deserialize)] 
+pub struct RouteModifiers{
+    #[serde(rename="avoidTolls")]
+    avoid_tolls: Option<bool>,
+    #[serde(rename="avoidHighways")]
+    avoid_highways: Option<bool>,
+    #[serde(rename="avoidFerries")]
+    avoid_ferries: Option<bool>,
+    #[serde(rename="avoidIndoor")]
+    avoid_indoors: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Units{
+    IMPERIAL,
+    METRIC,
 }

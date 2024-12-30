@@ -2,6 +2,7 @@ mod constants;
 mod handlers;
 mod models;
 mod services;
+mod utilities;
 
 use std::{env, sync::{Arc, Mutex}};
 use dotenv::dotenv;
